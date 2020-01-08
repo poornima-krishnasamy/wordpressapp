@@ -6,7 +6,7 @@ metadata:
 spec:
   tls:
   - hosts:
-    - poornima-hello.apps.live-1.cloud-platform.service.justice.gov.uk
+    - wpapp.apps.live-1.cloud-platform.service.justice.gov.uk
   rules:
   - host: wpapp.apps.live-1.cloud-platform.service.justice.gov.uk
     http:
