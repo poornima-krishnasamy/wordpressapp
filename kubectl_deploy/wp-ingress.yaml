@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wordpress-ingress
+  namespace: poornima-dev
+spec:
+  tls:
+  - hosts:
+    - poornima-hello.apps.live-1.cloud-platform.service.justice.gov.uk
+  rules:
+  - host: wpapp.apps.live-1.cloud-platform.service.justice.gov.uk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: wordpress
+          servicePort: 8000

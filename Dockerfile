@@ -1,14 +1,9 @@
-FROM wordpress:latest
+FROM wordpress:php7.4-apache
 
-ENV WORDPRESS_DB_HOST=db:3306 \
-    WORDPRESS_DB_USER=wordpress_user \
-    WORDPRESS_DB_PASSWORD=wordpress_password \
-    WORDPRESS_DB_NAME=wordpress
+COPY ./wp-content/themes/pktheme/ /usr/src/wordpress/wp-content/themes/pktheme
 
-COPY ./wordpress/wp-content/themes/pktheme/ /usr/src/wordpress/wp-content/themes/pktheme
+COPY ./vhosts.conf /etc/apache2/sites-available/000-default.conf
 
-WORKDIR /var/www/html
+COPY ./ports.conf /etc/apache2/ports.conf
 
-USER www-data
-
-
+USER 33
