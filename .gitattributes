@@ -1,1 +1,1 @@
-wp-secrets.yaml secrets.yaml filter=git-crypt diff=git-crypt
+wp-secrets.yaml filter=git-crypt diff=git-crypt
