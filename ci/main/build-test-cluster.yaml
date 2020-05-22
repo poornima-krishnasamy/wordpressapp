@@ -1,0 +1,43 @@
+
+resources:
+- name: tools-image
+  type: docker-image
+  source:
+    repository: ministryofjustice/cloud-platform-tools
+    tag: 1.13
+
+groups:
+- name: cluster-test
+  jobs:
+    - build-test-cluster
+
+jobs:
+  - name: build-test-cluster
+    serial: true
+    plan:
+      - in_parallel:
+        - get: tools-image
+          trigger: false
+      - task: build-test-cluster
+        image: tools-image
+        config:
+          platform: linux
+          params:
+            AWS_REGION: eu-west-2
+            AWS_PROFILE: moj-cp
+            AUTH0_DOMAIN: "justice-cloud-platform.eu.auth0.com"
+            AUTH0_CLIENT_ID: ((concourse-tf-auth0-credentials.client-id))
+            AUTH0_CLIENT_SECRET: ((concourse-tf-auth0-credentials.client_secret))
+            KOPS_STATE_STORE: s3://cloud-platform-kops-state
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                wget https://github.com/concourse/concourse/releases/download/v5.8.1/fly-5.8.1-linux-amd64.tgz
+                tar -xvf fly-5.8.1-linux-amd64.tgz
+                mv ./fly /bin/
+                rm fly-5.8.1-linux-amd64.tgz
+                fly --target build-pipeline login --team-name main --concourse-url https://concourse.apps.conc-3.cloud-platform.service.justice.gov.uk/
+                fly -t build-pipeline status
+                echo "Hello"
