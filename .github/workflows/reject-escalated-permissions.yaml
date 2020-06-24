@@ -8,3 +8,5 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: poornima-krishnasamy/wordpressapp/reject-escalated-privileges@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
