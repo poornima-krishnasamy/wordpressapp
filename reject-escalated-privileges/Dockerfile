@@ -1,4 +1,4 @@
-FROM ministryofjustice/cloud-platform-tools:1.9
+FROM ruby:2.6.3-alpine
 
 # Octokit depends on faraday, and an update to
 # faraday breaks the current version of octokit
