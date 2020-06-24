@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: poornima-krishnasamy/wordpressapp/reject-escalated-privileges@add-reject-escalated-priv
+      - uses: poornima-krishnasamy/wordpressapp/reject-escalated-privileges@master
