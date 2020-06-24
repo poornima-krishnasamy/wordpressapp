@@ -9,4 +9,4 @@ jobs:
       - uses: actions/checkout@master
       - uses: ministryofjustice/github-actions/malformed-yaml@main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
