@@ -16,7 +16,6 @@ def yaml_files(gh)
     recurse(hash, pattern) do |path, value|
       line = "#{path}:\t#{value}"
       line = line.gsub(pattern) {|match| match.green }
-      puts line
     end
 end
 
@@ -50,10 +49,12 @@ gh = GithubClient.new
 
 privileges_code = yaml_files(gh)
 
+if privileges_code
+  
   message = <<~EOF
     The YAML files contain below code which will grant the user escalated privileges:
 
-    #{file_list}
+    #{privileges_code}
 
     Please correct them and resubmit this PR.
 
