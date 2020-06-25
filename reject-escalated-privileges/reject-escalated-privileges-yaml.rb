@@ -3,22 +3,30 @@
 require "json"
 require "octokit"
 require "yaml"
-require 'colorize'
 
 require File.join(File.dirname(__FILE__), "github")
 
 PATTERN = "cluster-admin"
 
 def yaml_files(gh)
-  yaml_files_in_pr(gh).each do |file|
-    hash = YAML.load_file(file) 
-    pattern_text = Regexp.new(PATTERN, :nocase)
-    recurse(hash, pattern_text) do |path, value|
-      line = "#{path}:\t#{value}"
-      line = line.gsub(pattern_text) {|match| match.green }
-    end
+  yaml_files_in_pr(gh).find_all { |file| return has_escalations?(file) }
+end
+
+
+def has_escalations?(file)
+  return parse_yaml?(file)
+end
+
+def parse_yaml(file)
+  hash = YAML.load_file(file) 
+  pattern_text = Regexp.new(PATTERN, :nocase)
+  recurse(hash, pattern_text) do |path, value|
+    line = "#{path}:\t#{value}"
+    line = line.gsub(pattern_text) {|match| match }
+    return
   end
 end
+
 
 def recurse(obj, pattern, current_path = [], &block)
   if obj.is_a?(String)
@@ -50,7 +58,7 @@ gh = GithubClient.new
 
 privileges_code = yaml_files(gh)
 
-if !privileges_code.nil?
+if !privileges_code
 
   message = <<~EOF
     The YAML files contain below code which will grant the user escalated privileges:
@@ -61,7 +69,7 @@ if !privileges_code.nil?
 
   EOF
 
-  gh.reject_pr(message.red)
+  gh.reject_pr(message)
   exit 1
 end
 
