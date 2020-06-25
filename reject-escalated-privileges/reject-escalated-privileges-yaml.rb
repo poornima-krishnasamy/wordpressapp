@@ -60,7 +60,7 @@ if !privileges_code.nil?
 
   EOF
 
-  gh.reject_pr(message)
+  gh.reject_pr(message.red)
   exit 1
 end
 
