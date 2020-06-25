@@ -9,4 +9,6 @@ RUN gem install colorize
 COPY reject-escalated-privileges-yaml.rb /reject-escalated-privileges-yaml.rb
 COPY github.rb /github.rb
 
+RUN chmod +x /reject-malformed-yaml.rb
+
 ENTRYPOINT ["/reject-escalated-privileges-yaml.rb"]
