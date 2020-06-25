@@ -13,7 +13,7 @@ def yaml_files(gh)
   yaml_files_in_pr(gh).each do |file|
     hash = YAML.load_file(file) 
     pattern_text = Regexp.new(PATTERN, :nocase)
-    recurse(hash, pattern) do |path, value|
+    recurse(hash, pattern_text) do |path, value|
       line = "#{path}:\t#{value}"
       line = line.gsub(pattern) {|match| match.green }
     end
