@@ -15,8 +15,9 @@ def yaml_files(gh)
     pattern_text = Regexp.new(PATTERN, :nocase)
     recurse(hash, pattern_text) do |path, value|
       line = "#{path}:\t#{value}"
-      line = line.gsub(pattern) {|match| match.green }
+      line = line.gsub(pattern_text) {|match| match.green }
     end
+  end
 end
 
 def recurse(obj, pattern, current_path = [], &block)
@@ -54,7 +55,7 @@ if !privileges_code.nil?
   message = <<~EOF
     The YAML files contain below code which will grant the user escalated privileges:
 
-    #{privileges_code}
+    #{PATTERN}
 
     Please correct them and resubmit this PR.
 
@@ -62,8 +63,6 @@ if !privileges_code.nil?
 
   gh.reject_pr(message)
   exit 1
-end
-
 end
 
 
