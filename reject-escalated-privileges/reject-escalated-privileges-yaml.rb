@@ -9,12 +9,12 @@ require File.join(File.dirname(__FILE__), "github")
 PATTERN = "cluster-admin"
 
 def yaml_files(gh)
-  yaml_files_in_pr(gh).find_all { |file| return has_escalations?(file) }
+  yaml_files_in_pr(gh).find_all { |file| return has_escalations(file) }
 end
 
 
-def has_escalations?(file)
-  return parse_yaml?(file)
+def has_escalations(file)
+  return parse_yaml(file)
 end
 
 def parse_yaml(file)
