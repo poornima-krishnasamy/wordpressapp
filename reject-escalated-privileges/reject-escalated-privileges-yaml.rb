@@ -49,8 +49,8 @@ gh = GithubClient.new
 
 privileges_code = yaml_files(gh)
 
-if privileges_code
-  
+if !privileges_code.nil?
+
   message = <<~EOF
     The YAML files contain below code which will grant the user escalated privileges:
 
