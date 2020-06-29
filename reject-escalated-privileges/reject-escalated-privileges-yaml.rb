@@ -23,22 +23,23 @@ def main(file)
     line = "#{path}:\t#{value}"
     line = line.gsub(pattern) {|match| match }
     if(line != "")
-        message = <<~EOF
-          The YAML file
-          
-          #{file}
-          
-          contain the below code which will grant the user escalated privileges:
-    
-          #{line.red}
-    
-          Please correct them and resubmit this PR.
-    
-        EOF
-    
-        puts message
-      end
+      message = <<~EOF
+        The YAML file
+        
+        #{file}
+        
+        contain the below code which will grant the user escalated privileges:
+  
+        #{line.red}
+  
+        Please correct them and resubmit this PR.
+  
+      EOF
+  
+      puts message
+    end
   end
+  }
 end
 
 def recurse(obj, pattern, current_path = [], &block)
