@@ -3,21 +3,42 @@
 require "json"
 require "octokit"
 require "yaml"
-require 'colorize'
 
 require File.join(File.dirname(__FILE__), "github")
 
-PATTERN = "cluster-admin"
+# can expand this list spliting with spaces. e.g %w(cluster-admin root webops)
+STRING_LIST = %w(cluster-admin)
 
-def yaml_files(gh)
-  yaml_files_in_pr(gh).each do |file|
-    hash = YAML.load_file(file) 
-    pattern_text = Regexp.new(PATTERN, :nocase)
-    recurse(hash, pattern) do |path, value|
-      line = "#{path}:\t#{value}"
-      line = line.gsub(pattern) {|match| match.green }
-      puts line
-    end
+# Output the yaml file and the code if any of the strings in the STRING_LIST is
+# present in the files. 
+
+# The below code recurse through each of hash and array and pattern match if 
+# any of the string is present in any of the key or value field.
+
+def main(file)
+  yaml_files_in_pr(gh).find_all { |file| 
+  hash = YAML.load_file(file)
+  pattern = Regexp.union(STRING_LIST)
+  recurse(hash, pattern) do |path, value|
+    line = "#{path}:\t#{value}"
+    line = line.gsub(pattern) {|match| match }
+    if(line != "")
+        message = <<~EOF
+          The YAML file
+          
+          #{file}
+          
+          contain the below code which will grant the user escalated privileges:
+    
+          #{line.red}
+    
+          Please correct them and resubmit this PR.
+    
+        EOF
+    
+        puts message
+      end
+  end
 end
 
 def recurse(obj, pattern, current_path = [], &block)
@@ -29,6 +50,10 @@ def recurse(obj, pattern, current_path = [], &block)
   elsif obj.is_a?(Hash)
     obj.each do |key, value|
       recurse(value, pattern, current_path + [key], &block)
+    end
+  elsif obj.is_a?(Array)
+    obj.each do |value|
+      recurse(value, pattern, current_path, &block)
     end
   end
 end
@@ -48,19 +73,6 @@ end
 
 gh = GithubClient.new
 
-privileges_code = yaml_files(gh)
-
-  message = <<~EOF
-    The YAML files contain below code which will grant the user escalated privileges:
-
-    #{file_list}
-
-    Please correct them and resubmit this PR.
-
-  EOF
-
-  gh.reject_pr(message)
-  exit 1
-end
+main(gh)
 
 
