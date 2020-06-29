@@ -22,23 +22,25 @@ def main(gh)
   recurse(hash, pattern) do |path, value|
     line = "#{path}:\t#{value}"
     line = line.gsub(pattern) {|match| match }
-    if(!line.blank?)
+    if(!line.nil?)
       message = <<~EOF
-        The YAML file below
-        
-        #{file}
-        
-        contain the code 
+      The YAML file below
+      
+      #{file}
+      
+      contain the code 
 
-        #{line}
+      #{line}
 
-        which will grant the user escalated privileges.
-  
-        Please correct them and resubmit this PR.
-  
-        EOF
-  
+      which will grant the user escalated privileges.
+
+      Please correct them and resubmit this PR.
+
+      EOF
+
       puts message
+      gh.reject_pr(message)
+      exit 1
     end
   end
   }
