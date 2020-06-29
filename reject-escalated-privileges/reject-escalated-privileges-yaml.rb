@@ -15,7 +15,7 @@ STRING_LIST = %w(cluster-admin)
 # The below code recurse through each of hash and array and pattern match if 
 # any of the string is present in any of the key or value field.
 
-def main(file)
+def main(gh)
   yaml_files_in_pr(gh).find_all { |file| 
   hash = YAML.load_file(file)
   pattern = Regexp.union(STRING_LIST)
