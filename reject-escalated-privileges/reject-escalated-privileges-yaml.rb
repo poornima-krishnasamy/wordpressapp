@@ -22,19 +22,21 @@ def main(gh)
   recurse(hash, pattern) do |path, value|
     line = "#{path}:\t#{value}"
     line = line.gsub(pattern) {|match| match }
-    if(line != "")
+    if(!line.blank?)
       message = <<~EOF
-        The YAML file
+        The YAML file below
         
         #{file}
         
-        contain the below code which will grant the user escalated privileges:
-  
-        #{line.red}
+        contain the code 
+
+        #{line}
+
+        which will grant the user escalated privileges.
   
         Please correct them and resubmit this PR.
   
-      EOF
+        EOF
   
       puts message
     end
