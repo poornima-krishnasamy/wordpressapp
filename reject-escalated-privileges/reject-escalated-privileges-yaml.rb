@@ -37,8 +37,7 @@ def main(gh)
       Please correct them and resubmit this PR.
 
       EOF
-
-      puts message
+      
       gh.reject_pr(message)
       exit 1
     end
