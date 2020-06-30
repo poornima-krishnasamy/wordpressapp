@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: poornima-krishnasamy/wordpressapp/reject-escalated-privileges-yaml@master
+      - uses: ministryofjustice/github-actions/reject-escalated-privileges-yaml@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
