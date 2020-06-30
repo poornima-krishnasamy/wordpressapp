@@ -18,10 +18,11 @@ STRING_LIST = %w[cluster-admin]
 def main(gh)
   pattern = Regexp.union(STRING_LIST)
   yaml_files_in_pr(gh).find_all { |file|
-    hash = YAML.load_file(file) if FileTest.exists?(file)
+  if FileTest.exists?(file)
+    hash = YAML.load_file(file) 
     recurse(hash, pattern) do |path, value|
       line = "#{path}:\t#{value}"
-      if(pattern.match?(line))
+      if pattern.match?(line)
         message = <<~EOF
           The YAML file below
           
@@ -41,6 +42,7 @@ def main(gh)
         exit 1
       end
     end
+  end
   }
 end
 
