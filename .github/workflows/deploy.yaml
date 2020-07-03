@@ -14,6 +14,6 @@ jobs:
         chart: 'wpapp'
         namespace: poornima-dev
         release: production-myapp
-        value-files: './config/development.yml'
+        value-files: './config/development.yaml'
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
