@@ -1,0 +1,6 @@
+name: WordpressApp Helm action
+description: 
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile

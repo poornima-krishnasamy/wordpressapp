@@ -11,9 +11,9 @@ jobs:
       uses: 'poornima-krishnasamy/wordpressapp/helm-deploy@master'
       with:
         token: '${{ github.token }}'
-        chart: 'wpapp'
+        chart: 'helm-deploy'
         namespace: poornima-dev
-        release: production-myapp
+        release: dev-myapp
         value-files: './config/development.yaml'
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'

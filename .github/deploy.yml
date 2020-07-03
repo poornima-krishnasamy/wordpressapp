@@ -55,7 +55,7 @@ development:
   required_contexts: ["build"]
 
   environment: pr${{ pr }}
-  description: 'Review'
+  description: 'Development'
   payload:
     value_files: ["./config/development.yaml"]
     release: dev-myapp-${{ pr }}
