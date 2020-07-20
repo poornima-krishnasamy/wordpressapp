@@ -2,8 +2,8 @@ name: Push image on each push to branch
 on:
   # Trigger the workflow on push to a feature branch
   push:
-    tags:
-      - '!refs/tags/*'
+    branches:
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
