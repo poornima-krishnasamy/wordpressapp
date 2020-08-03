@@ -7,6 +7,7 @@ on:
       - master
 jobs:
   build:
+    name: Build job
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -21,16 +22,18 @@ jobs:
         run: docker build . --file Dockerfile --tag poornimak/wordpressapp:${{steps.vars.outputs.sha_short}}
       - name: Push the tagged Docker image
         run: docker push poornimak/wordpressapp:${{steps.vars.outputs.sha_short}}
-      - name: Deploy to development
-        uses: steebchen/kubectl@master
+
+  deploy:
+    name: Deploy job
+    container:
+      image: ministryofjustice/cloud-platform-tools:1.21
+    steps:
+      - name: Deploy to kubernetes
+        run: |
+            ./set-kube-auth.sh
+            helm upgrade my-wpapp helm_deploy --install --namespace=${{ secrets.NAMESPACE }}
         env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
-        with:
-          args: set image --record deployment/my-wpapp-helm-deploy wordpress=poornimak/wordpressapp:${{steps.vars.outputs.sha_short}} -n poornima-dev
-      - name: verify deployment
-        uses: steebchen/kubectl@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
-          KUBECTL_VERSION: "1.15"
-        with:
-          args: '"rollout status deployment/my-wpapp-helm-deploy"'
+          KUBE_ENV_DEV_NAME: ${{ secrets.CLUSTER_NAME }}
+          KUBE_ENV_DEV_NAMESPACE: ${{ secrets.NAMESPACE }}
+          KUBE_ENV_DEV_CACERT: ${{ secrets.CA_CERT }}
+          KUBE_ENV_DEV_TOKEN: ${{ secrets.CA_TOKEN }}
