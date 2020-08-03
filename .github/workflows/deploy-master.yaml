@@ -1,4 +1,4 @@
-name: deploy to development on merge to master branch
+name: deploy to development on merge toc master branch
 on:
   # Trigger the workflow on push or pull request,
   # but only for the master branch
