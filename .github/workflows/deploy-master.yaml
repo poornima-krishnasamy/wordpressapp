@@ -25,6 +25,7 @@ jobs:
 
   deploy:
     name: Deploy job
+    runs-on: ubuntu-latest
     container:
       image: ministryofjustice/cloud-platform-tools:1.21
     steps:
