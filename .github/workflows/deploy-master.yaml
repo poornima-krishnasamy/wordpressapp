@@ -37,6 +37,8 @@ jobs:
           kubectl config set-context ${{ secrets.CLUSTER_NAME }} --cluster=${{ secrets.CLUSTER_NAME }} --user=gh-action --namespace=${{ secrets.NAMESPACE }}
           kubectl config use-context ${{ secrets.CLUSTER_NAME }}
           kubectl get pods --namespace ${{ secrets.NAMESPACE }}
+          helm upgrade my-wpapp helm_deploy --install --namespace=${{ secrets.NAMESPACE }}
+
         env:
           KUBE_ENV_DEV_NAME: ${{ secrets.CLUSTER_NAME }}
           KUBE_ENV_DEV_NAMESPACE: ${{ secrets.NAMESPACE }}
