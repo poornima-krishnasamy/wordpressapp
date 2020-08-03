@@ -31,8 +31,12 @@ jobs:
     steps:
       - name: Deploy to kubernetes
         run: |
-            ls -lrta
-            pwd
+          echo -n ${{ secrets.CA_CERT }} | base64 -d > ./ca.crt
+          kubectl config set-cluster ${{ secrets.CLUSTER_NAME }} --certificate-authority=./ca.crt --server=https://api.${{ secrets.CLUSTER_NAME }}
+          kubectl config set-credentials gh-action --token=${{ secrets.CA_TOKEN }}
+          kubectl config set-context ${{ secrets.CLUSTER_NAME }} --cluster=${{ secrets.CLUSTER_NAME }} --user=gh-action --namespace=${{ secrets.NAMESPACE }}
+          kubectl config use-context ${{ secrets.CLUSTER_NAME }}
+          kubectl get pods --namespace ${{ secrets.NAMESPACE }}
         env:
           KUBE_ENV_DEV_NAME: ${{ secrets.CLUSTER_NAME }}
           KUBE_ENV_DEV_NAMESPACE: ${{ secrets.NAMESPACE }}
