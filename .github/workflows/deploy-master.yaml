@@ -31,8 +31,8 @@ jobs:
     steps:
       - name: Deploy to kubernetes
         run: |
-            ./set-kube-auth.sh
-            helm upgrade my-wpapp helm_deploy --install --namespace=${{ secrets.NAMESPACE }}
+            ls -lrta
+            pwd
         env:
           KUBE_ENV_DEV_NAME: ${{ secrets.CLUSTER_NAME }}
           KUBE_ENV_DEV_NAMESPACE: ${{ secrets.NAMESPACE }}
