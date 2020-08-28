@@ -1,4 +1,4 @@
-name: deploy to development on merge toc master branch
+name: deploy to development on merge to master branch
 on:
   # Trigger the workflow on push or pull request,
   # but only for the master branch
@@ -6,28 +6,43 @@ on:
     branches:
       - master
 jobs:
-  build:
-    name: Build job
+  upload_sha:
+    name: Upload sha_short artifact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Login to DockerHub Registry
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
       - name: Declare variables
         id: vars
         shell: bash
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - run: echo ${{steps.vars.outputs.sha_short}} > sha_short
+          expr ${{steps.vars.outputs.sha_short}} > sha_short
       - name: Upload sha_short artifact
         uses: actions/upload-artifact@v2
         with:
           name: image_sha
           path: sha_short
+      
+  build:
+    name: Build job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/download-artifact@v2
+        id: sha
+        with:
+          name: image_sha
+          path: sha_short
+        shell: bash
+        run: |
+          echo "::set-output name=sha_short::$(cat sha_short)"
+      - name: Login to DockerHub Registry
+        run: echo ${{steps.sha.outputs.sha_short}}
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
       - name: Build the tagged Docker image
-        run: docker build . --file Dockerfile --tag poornimak/wordpressapp:${{steps.vars.outputs.sha_short}}
+        run: docker build . --file Dockerfile --tag poornimak/wordpressapp:${{steps.sha.outputs.sha_short}}
       - name: Push the tagged Docker image
-        run: docker push poornimak/wordpressapp:${{steps.vars.outputs.sha_short}}
+        run: docker push poornimak/wordpressapp:${{steps.sha.outputs.sha_short}}
 
   deploy:
     name: Deploy job
