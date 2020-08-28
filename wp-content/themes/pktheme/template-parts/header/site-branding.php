@@ -7,7 +7,7 @@
  * @since 1.0.0
  */
 ?>
-<div class="site-branding">
+<div class="site-branding test-1">
 
 	<?php if ( has_custom_logo() ) : ?>
 		<div class="site-logo"><?php the_custom_logo(); ?></div>
