@@ -20,8 +20,8 @@ jobs:
       - name: Upload sha_short artifact
         uses: actions/upload-artifact@v2
         with:
-          name: image_sha
-          path: sha_short
+          name: sha
+          path: image_sha
       
   build:
     name: Build job
@@ -29,15 +29,15 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: image_sha
-          path: sha_short
+          name: sha
+          path: image_sha
       - name: set Output of artifact
         id: sha
         shell: bash
-        working-directory: sha_short
+        working-directory: image_sha
         run: |
           ls -R
-          echo "::set-output name=sha_short::$(cat sha_short)"
+          echo "::set-output name=sha_short::$(cat sha)"
       - uses: actions/checkout@v1
       - name: Login to DockerHub Registry
         run: |
