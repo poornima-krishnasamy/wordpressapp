@@ -48,8 +48,8 @@ jobs:
   deploy:
     name: Deploy job
     runs-on: ubuntu-latest
-    container:
-      image: ministryofjustice/cloud-platform-tools:1.21
+    # container:
+    #   image: ministryofjustice/cloud-platform-tools:1.21
     steps:
       - name: Download sha_short artifact
       - uses: actions/download-artifact@v2
@@ -62,6 +62,7 @@ jobs:
           ls -R
           echo "::set-output name=sha_short::$(cat sha_short)"
       - name: Deploy to kubernetes
+      - uses: ministryofjustice/cloud-platform-tools:1.21
         run: |
           echo ${{steps.sha.outputs.sha_short}} 
           echo -n ${{ secrets.CA_CERT }} | base64 -d > ./ca.crt
