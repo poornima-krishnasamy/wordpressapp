@@ -37,7 +37,7 @@ jobs:
         shell: bash
         run: |
           ls -R
-          echo "::set-output name=sha_short::$(cat sha_short)"
+          echo "::set-output name=sha_short::$(cat sha_short/sha)"
       - uses: actions/checkout@v1
       - name: Login to DockerHub Registry
         run: |
