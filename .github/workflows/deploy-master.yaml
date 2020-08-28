@@ -21,6 +21,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: sha
+          path: image_sha
       
   build:
     name: Build job
@@ -30,6 +31,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: sha
+          path: image_sha
       - name: set Output of artifact
         id: sha
         shell: bash
