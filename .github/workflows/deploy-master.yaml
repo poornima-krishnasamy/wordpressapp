@@ -30,7 +30,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: sha_short
-          path: sha_short
       - name: set Output of artifact
         id: sha
         shell: bash
