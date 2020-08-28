@@ -48,33 +48,33 @@ jobs:
       - name: Push the tagged Docker image
         run: docker push poornimak/wordpressapp:${{steps.sha.outputs.sha_short}}
 
-  deploy:
-    name: Deploy job
-    runs-on: ubuntu-latest
-    container:
-      image: ministryofjustice/cloud-platform-tools:1.21
-    steps:
-      - name: Download sha_short artifact
-        id: sha
-        uses: actions/download-artifact@v2
-        with:
-          name: image_sha
-        shell: bash
-        run: |
-          echo "::set-output name=sha_short::$(cat sha_short)"
-      - name: Deploy to kubernetes
-        run: |
-          echo ${{steps.sha.outputs.sha_short}} 
-          echo -n ${{ secrets.CA_CERT }} | base64 -d > ./ca.crt
-          kubectl config set-cluster ${{ secrets.CLUSTER_NAME }} --certificate-authority=./ca.crt --server=https://api.${{ secrets.CLUSTER_NAME }}
-          kubectl config set-credentials gh-action --token=${{ secrets.CA_TOKEN }}
-          kubectl config set-context ${{ secrets.CLUSTER_NAME }} --cluster=${{ secrets.CLUSTER_NAME }} --user=gh-action --namespace=${{ secrets.NAMESPACE }}
-          kubectl config use-context ${{ secrets.CLUSTER_NAME }}
-          kubectl get pods --namespace ${{ secrets.NAMESPACE }}
-          kubectl set image deployment wordpress wordpress=poornimak/wordpressapp:${{steps.sha.outputs.sha_short}} --namespace=${{ secrets.NAMESPACE }}
-          kubectl rollout status deployment wordpress --namespace=${{ secrets.NAMESPACE }}
-        env:
-          KUBE_ENV_DEV_NAME: ${{ secrets.CLUSTER_NAME }}
-          KUBE_ENV_DEV_NAMESPACE: ${{ secrets.NAMESPACE }}
-          KUBE_ENV_DEV_CACERT: ${{ secrets.CA_CERT }}
-          KUBE_ENV_DEV_TOKEN: ${{ secrets.CA_TOKEN }}
+  # deploy:
+  #   name: Deploy job
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: ministryofjustice/cloud-platform-tools:1.21
+  #   steps:
+  #     - name: Download sha_short artifact
+  #       id: sha
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: image_sha
+  #       shell: bash
+  #       run: |
+  #         echo "::set-output name=sha_short::$(cat sha_short)"
+  #     - name: Deploy to kubernetes
+  #       run: |
+  #         echo ${{steps.sha.outputs.sha_short}} 
+  #         echo -n ${{ secrets.CA_CERT }} | base64 -d > ./ca.crt
+  #         kubectl config set-cluster ${{ secrets.CLUSTER_NAME }} --certificate-authority=./ca.crt --server=https://api.${{ secrets.CLUSTER_NAME }}
+  #         kubectl config set-credentials gh-action --token=${{ secrets.CA_TOKEN }}
+  #         kubectl config set-context ${{ secrets.CLUSTER_NAME }} --cluster=${{ secrets.CLUSTER_NAME }} --user=gh-action --namespace=${{ secrets.NAMESPACE }}
+  #         kubectl config use-context ${{ secrets.CLUSTER_NAME }}
+  #         kubectl get pods --namespace ${{ secrets.NAMESPACE }}
+  #         kubectl set image deployment wordpress wordpress=poornimak/wordpressapp:${{steps.sha.outputs.sha_short}} --namespace=${{ secrets.NAMESPACE }}
+  #         kubectl rollout status deployment wordpress --namespace=${{ secrets.NAMESPACE }}
+  #       env:
+  #         KUBE_ENV_DEV_NAME: ${{ secrets.CLUSTER_NAME }}
+  #         KUBE_ENV_DEV_NAMESPACE: ${{ secrets.NAMESPACE }}
+  #         KUBE_ENV_DEV_CACERT: ${{ secrets.CA_CERT }}
+  #         KUBE_ENV_DEV_TOKEN: ${{ secrets.CA_TOKEN }}
