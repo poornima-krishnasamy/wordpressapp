@@ -4,14 +4,15 @@ metadata:
   name: wordpress-ingress
   namespace: poornima-dev
   annotations:
+    kubernetes.io/ingress.class: poornima-dev
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth
 spec:
   tls:
   - hosts:
-    - wpapp.apps.live-1.cloud-platform.service.justice.gov.uk
+    - my-wpapp-dev.apps.live-1.cloud-platform.service.justice.gov.uk
   rules:
-  - host: wpapp.apps.live-1.cloud-platform.service.justice.gov.uk
+  - host: my-wpapp-dev.apps.live-1.cloud-platform.service.justice.gov.uk
     http:
       paths:
       - path: /

@@ -1,10 +1,10 @@
-apiVersion: policy/v1beta1
-kind: PodDisruptionBudget
-metadata:
-  name: my-wpapp-pdb
-  namespace: poornima-staging
-spec:
-  minAvailable: 30%
-  selector:
-    matchLabels:
-      app: wordpress
+# apiVersion: policy/v1beta1
+# kind: PodDisruptionBudget
+# metadata:
+#   name: my-wpapp-pdb
+#   namespace: poornima-staging
+# spec:
+#   minAvailable: 30%
+#   selector:
+#     matchLabels:
+#       app: wordpress
