@@ -15,8 +15,8 @@ jobs:
         id: vars
         shell: bash
         run: |
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-          expr ${{steps.vars.outputs.sha_short}} > sha_short
+            git rev-parse --short HEAD > sha_short
+            echo sha_short
       - name: Upload sha_short artifact
         uses: actions/upload-artifact@v2
         with:
