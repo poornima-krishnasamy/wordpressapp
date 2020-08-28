@@ -75,7 +75,7 @@ jobs:
           kubectl config use-context ${{ secrets.CLUSTER_NAME }}
           kubectl get pods --namespace ${{ secrets.NAMESPACE }}
           kubectl set image deployment wordpress wordpress=poornimak/wordpressapp:${{steps.sha.outputs.sha_short}} --namespace=${{ secrets.NAMESPACE }}
-          kubectl rollout status deployment wordpress --namespace=${{ secrets.NAMESPACE }}
+          kubectl get pods -n poornima-dev
         env:
           KUBE_ENV_DEV_NAME: ${{ secrets.CLUSTER_NAME }}
           KUBE_ENV_DEV_NAMESPACE: ${{ secrets.NAMESPACE }}
