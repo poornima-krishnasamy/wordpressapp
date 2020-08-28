@@ -27,15 +27,18 @@ jobs:
     name: Build job
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
       - uses: actions/download-artifact@v2
         id: sha
         with:
           name: image_sha
           path: sha_short
+      - name: set Output of artifact
         shell: bash
+        working-directory: sha_short
         run: |
+          ls -R
           echo "::set-output name=sha_short::$(cat sha_short)"
+      - uses: actions/checkout@v1
       - name: Login to DockerHub Registry
         run: echo ${{steps.sha.outputs.sha_short}}
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
